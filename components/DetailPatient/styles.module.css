@@ -1,0 +1,57 @@
+.main {
+  background-color: #34577e;
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+.content {
+  color: #27a743;
+  font-size: 1.2rem;
+}
+.select {
+  border-radius: 5px;
+  width: 100%;
+  height: 40px;
+  font-family: Prompt;
+}
+.input {
+  border-radius: 5px;
+  width: 100%;
+  height: 40px;
+  font-family: Prompt;
+  border-color: unset;
+}
+.inputdisabled{
+    background-color: white;
+    color: black;
+}
+.textAreaStyle {
+  border-radius: 5px;
+  width: 100%;
+  height: 100px;
+  font-family: Prompt;
+  border-color: unset;
+}
+.select option {
+  border-radius: 5px;
+  padding: 5px;
+  height: 40px;
+  font-family: Prompt;
+}
+.formControl {
+  padding-top: 5px;
+  padding-right: 15px;
+}
+.formControl label {
+  color: #bbc7d4;
+  margin-bottom: 5px;
+}
+.AddButton{
+  background-color:#ffc107 ;
+  border-radius: 5px;
+  padding: 5px;
+  font-family: Prompt;
+  font-weight: 500;
+  
+}
+/* , #ffc107, #bbc7d4, #34577e, #27a743, #234973  */

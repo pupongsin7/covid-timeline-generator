@@ -1,0 +1,72 @@
+.Itemtimeline{
+    display: flex;
+    flex-direction:row;
+    justify-content: flex-start;
+    position: relative;
+}
+.LineTimeline{
+    border-right:1px dotted  white;
+    content: "";
+    left: 102px;
+    position: absolute;
+    height: 100%;
+}
+.Circle{
+    background-color:#ffc107; 
+    padding: 7px;
+    width:7px;
+    height:7px;
+    border-radius: 7px;
+    display: flex;
+    margin:5px;
+    z-index: 2;
+    margin-top: 10px;
+}
+.date{
+    display: flex;
+    justify-content: flex-start;
+    flex-basis:100px;
+    min-width: 90px;
+    height:25px;
+    padding:5px;
+    color: #ffc107;
+    font-size:0.9rem;
+}
+.ItemTimeInTimeLine{
+    background-color: rgba(187, 199, 212,0.5);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    color:white;
+    margin-bottom: 10px;
+    padding:5px;
+}
+.TimelineInItemBox{
+    color: #ffc107;
+    margin-right: 5px;
+    width:45px;
+}
+.DetailTimeline{
+    display: flex;
+    justify-content: space-between;
+}
+.DetailContent{
+    display: flex;
+    flex-grow: 1;
+}
+.buttonDelete{
+    background-color: unset;
+    border: unset;
+    color:white;
+    font-weight: bold;
+    font-size: 10px;
+}
+.buttonDelete:hover{
+    border: rgba(187, 199, 212,0.5);
+}
+.BoxButton{
+    display: flex;
+    align-items: flex-start;
+    padding-top:5px;
+}

@@ -1,0 +1,35 @@
+.main{
+    border: 1px solid #ffc107;
+    width: 100%;
+    padding: 15px;
+}
+.HeaderTimeline{
+    color: #ffc107;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+.NameTag{
+    background-color:#ffc107;
+    height:70px;
+    padding: 35px;
+    margin-top: 5px;
+    border-radius: 35px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.NameTag>div{
+    display: flex;
+    justify-content: center;
+}
+.NameTag>div:first-of-type{
+    font-size:1.3rem;
+}
+.NameTag>div:last-of-type{
+    font-size:0.8rem;
+}
+.ContainerTimeline{
+    margin-top: 10px;
+    overflow-y: auto;
+    position: relative;
+}
