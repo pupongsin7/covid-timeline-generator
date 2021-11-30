@@ -4,27 +4,43 @@ import { Grid, Box, Button } from "@mui/material";
 import AdapterMoment from "@mui/lab/AdapterMoment";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DesktopDateTimePicker from "@mui/lab/DesktopDateTimePicker";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import moment from "@date-io/moment";
 import { style } from "@mui/system";
 import { isDate } from "moment";
 type AddData = {
-    sex: string;
-    age: string;
-    occupation: string;
-    date: Date | null;
-    detailTimeline: string;
-  };
+  sex: string;
+  age: string;
+  occupation: string;
+  date: Date | null;
+  detailTimeline: string;
+};
+type TimelineData = {
+  sex: string;
+  age: string;
+  occupation: string;
+  detail: Array<Data>;
+};
+type Data = {
+  originalDate: Date | null;
+  date: string;
+  time: string;
+  detail: string;
+};
 interface IDetailPatientProps {
-    AddDatatoFirebase: (AddData:AddData)=>void
+  AddDatatoFirebase: (AddData: AddData) => void;
+  data: TimelineData;
 }
-const DetailPatient:React.FC<IDetailPatientProps> = ({AddDatatoFirebase}) => {
+const DetailPatient: React.FC<IDetailPatientProps> = (
+  props: IDetailPatientProps
+) => {
+  const [timeline, setTimeline] = useState<TimelineData>(props.data);
   const [date, setDate] = useState<Date | null>(new Date());
   const [detailTimeline, setDetailTimeline] = useState<string>("");
-  const [sex, setSex] = useState<string>("ชาย");
+  const [sex, setSex] = useState<string>("");
   const [age, setAge] = useState<string>("");
   const [occupation, setOccupation] = useState<string>("");
-  const [checkValidate,setCheckValidate] = useState<Boolean>(false)
+  const [checkValidate, setCheckValidate] = useState<Boolean>(false);
   const addData = () => {
     let DatatoAdd: AddData = {
       sex: sex,
@@ -33,12 +49,27 @@ const DetailPatient:React.FC<IDetailPatientProps> = ({AddDatatoFirebase}) => {
       date: date,
       detailTimeline: detailTimeline,
     };
-    AddDatatoFirebase(DatatoAdd)
+    props.AddDatatoFirebase(DatatoAdd);
   };
-  useEffect(()=>{
-    const Checkdata:Boolean = age.trim().length > 0 && occupation.trim().length > 0 && isDate(date) && detailTimeline.trim().length > 0
-    setCheckValidate(Checkdata)
-  },[age,occupation,date,detailTimeline])
+  useEffect(() => {
+    const Checkdata: Boolean =
+      age.trim().length > 0 &&
+      occupation.trim().length > 0 &&
+      detailTimeline.trim().length > 0;
+    setCheckValidate(Checkdata);
+  }, [age, occupation, date, detailTimeline]);
+  useEffect(() => {
+    setTimeline(props.data);
+    setSex(props.data.sex);
+    setAge(props.data.age);
+    setOccupation(props.data.occupation);
+  }, [props.data]);
+  useEffect(() => {
+    setTimeline(props.data);
+    setSex(timeline.sex);
+    setAge(timeline.age);
+    setOccupation(timeline.occupation);
+  }, []);
   return (
     <Grid item xs={12} md={5} lg={4} style={{ padding: "10px" }}>
       <Grid container className={styles.main}>
@@ -137,7 +168,11 @@ const DetailPatient:React.FC<IDetailPatientProps> = ({AddDatatoFirebase}) => {
           </div>
         </Grid>
         <Grid item xs={12}>
-          <button className={styles.AddButton} onClick={addData} disabled={!checkValidate}>
+          <button
+            className={styles.AddButton}
+            onClick={addData}
+            disabled={!checkValidate}
+          >
             + เพิ่มข้อมูล
           </button>
         </Grid>

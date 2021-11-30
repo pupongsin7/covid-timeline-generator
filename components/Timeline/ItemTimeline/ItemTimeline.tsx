@@ -16,7 +16,6 @@ const ItemTimeline = (props: IItemTimelineProps) => {
     console.log("ClickDelete");
   };
   let timeline: any = props.data;
-  console.log(timeline);
   return (
     <div className={styles.Itemtimeline}>
       <div className={styles.LineTimeline}></div>
