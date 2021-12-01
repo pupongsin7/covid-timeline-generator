@@ -1,3 +1,30 @@
+@media screen and (max-width:375px)  {
+    .date{
+        display: flex;
+        justify-content: flex-start;
+        flex-basis:60px;
+        min-width: 70px !important;
+        height:25px;
+        padding-top: 10px !important;
+        color: #ffc107;
+        font-size:0.7rem !important;
+    }
+    .LineTimeline{
+        border-right:1px dotted  white;
+        content: "";
+        left: 82px !important;
+        position: absolute;
+        height: 100%;
+    }
+    .TimelineInItemBox{
+        padding-top: 2px !important;
+       font-size: 0.7rem !important;
+    }
+    .ItemTimeInTimeLine{
+        padding:4px !important;
+    
+    }
+}
 .Itemtimeline{
     display: flex;
     flex-direction:row;
@@ -6,6 +33,7 @@
     animation: fadein 1s;
 
 }
+
 @keyframes fadein {
     from {left: -800px;}
     to {left: 0px;}

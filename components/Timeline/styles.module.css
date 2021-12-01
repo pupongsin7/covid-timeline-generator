@@ -3,6 +3,17 @@
     width: 100%;
     padding: 15px;
 }
+@media screen and (max-width:375px)  {
+    .main{
+        font-size: 0.8rem !important;
+    }
+    .NameTag>div:first-of-type{
+        font-size:1rem !important;
+    }
+    .NameTag>div:last-of-type{
+        font-size:0.8rem !important;
+    }
+}
 .HeaderTimeline{
     color: #ffc107;
     font-size: 1.8rem;
