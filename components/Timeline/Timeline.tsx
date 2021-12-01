@@ -4,8 +4,10 @@ import { Grid, Input } from "@mui/material";
 import ItemTimeline from "./ItemTimeline/ItemTimeline";
 import { useEffect, useState } from "react";
 import * as _ from "lodash";
+import { areDayPropsEqual } from "@mui/lab/PickersDay/PickersDay";
 interface ITimelineProps {
   data: TimelineData;
+  deleteItem: (datadelete: Data) => void;
 }
 type TimelineData = {
   sex: string;
@@ -14,11 +16,12 @@ type TimelineData = {
   detail: Array<Data>;
 };
 type Data = {
-  originalDate: Date | null;
+  originalDate: string;
   date: string;
   time: string;
   detail: string;
 };
+
 const groupBy1 = (items: any, key: any) =>
   items.reduce(
     (result: any, item: any) => ({
@@ -28,6 +31,9 @@ const groupBy1 = (items: any, key: any) =>
     {}
   );
 const Timeline = (props: ITimelineProps) => {
+  const deleteItem = (datadelete: any) => {
+    props.deleteItem(datadelete);
+  };
   const [timeline, setTimeline] = useState<TimelineData>({
     sex: "",
     age: "",
@@ -35,13 +41,24 @@ const Timeline = (props: ITimelineProps) => {
     detail: [],
   });
   const [groupforLoopItem, setGroupforLoopItem] = useState<any>([]);
+  const [tempPo, settempPo] = useState<any>([]);
+  useEffect(() => {
+    setTimeline((prevState) => ({
+      ...props.data,
+      detail: _.sortBy(props.data.detail, function (dateObj) {
+        return new Date(dateObj.originalDate);
+      }),
+    }));
+  }, [props.data]);
   useEffect(() => {
     setTimeline(props.data);
     setTimeline((prevState) => ({
-      ...prevState,
-      detail: _.sortBy(prevState.detail,['date','time'])
+      ...props.data,
+      detail: _.sortBy(props.data.detail, function (dateObj) {
+        return new Date(dateObj.originalDate);
+      }),
     }));
-  }, [props.data]);
+  }, []);
   useEffect(() => {
     setGroupforLoopItem(_.groupBy(timeline.detail, "date"));
   }, [timeline]);
@@ -67,7 +84,11 @@ const Timeline = (props: ITimelineProps) => {
                     <ItemTimeline data={value} key={key}></ItemTimeline>
                     ))} */}
           {Object.entries(groupforLoopItem).map((value: any, key) => (
-            <ItemTimeline data={value} key={key}></ItemTimeline>
+            <ItemTimeline
+              deleteItem={deleteItem}
+              data={value}
+              key={key}
+            ></ItemTimeline>
           ))}
         </Grid>
       </Grid>

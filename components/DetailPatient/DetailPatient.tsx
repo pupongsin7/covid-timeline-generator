@@ -5,14 +5,13 @@ import AdapterMoment from "@mui/lab/AdapterMoment";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DesktopDateTimePicker from "@mui/lab/DesktopDateTimePicker";
 import { useState, useEffect } from "react";
-import moment from "@date-io/moment";
 import { style } from "@mui/system";
-import { isDate } from "moment";
+import moment from "moment"
 type AddData = {
   sex: string;
   age: string;
   occupation: string;
-  date: Date | null;
+  date: string;
   detailTimeline: string;
 };
 type TimelineData = {
@@ -22,7 +21,7 @@ type TimelineData = {
   detail: Array<Data>;
 };
 type Data = {
-  originalDate: Date | null;
+  originalDate: string;
   date: string;
   time: string;
   detail: string;
@@ -37,7 +36,7 @@ const DetailPatient: React.FC<IDetailPatientProps> = (
   const [timeline, setTimeline] = useState<TimelineData>(props.data);
   const [date, setDate] = useState<Date | null>(new Date());
   const [detailTimeline, setDetailTimeline] = useState<string>("");
-  const [sex, setSex] = useState<string>("");
+  const [sex, setSex] = useState<string>("ชาย");
   const [age, setAge] = useState<string>("");
   const [occupation, setOccupation] = useState<string>("");
   const [checkValidate, setCheckValidate] = useState<Boolean>(false);
@@ -46,7 +45,7 @@ const DetailPatient: React.FC<IDetailPatientProps> = (
       sex: sex,
       age: age,
       occupation: occupation,
-      date: date,
+      date: moment(date).format(),
       detailTimeline: detailTimeline,
     };
     props.AddDatatoFirebase(DatatoAdd);
@@ -132,10 +131,12 @@ const DetailPatient: React.FC<IDetailPatientProps> = (
             <label htmlFor="">วันเวลา</label>
             <LocalizationProvider dateAdapter={AdapterMoment}>
               <DesktopDateTimePicker
+                inputFormat="DD/MM/yyyy HH:mm"
                 label="Custom input"
                 value={date}
-                onChange={(newValue) => {
-                  setDate(newValue);
+                onChange={(date) => {
+                  // console.log(new Date(newValue.toString()))
+                  setDate(date);
                 }}
                 renderInput={({ inputRef, inputProps, InputProps }) => (
                   <Box sx={{ display: "flex", alignItems: "center" }}>

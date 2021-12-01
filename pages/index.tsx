@@ -5,6 +5,7 @@ import Timeline from "../components/Timeline/Timeline";
 import { InferGetStaticPropsType } from "next";
 import app from "../firebase/firebase";
 import moment from "moment";
+import * as _ from "lodash";
 import { useEffect, useState } from "react";
 import {
   getDoc,
@@ -32,6 +33,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
     const docRef = doc(db, "covid", "1");
     const querySnapshot = await getDoc(docRef);
     if (querySnapshot.exists()) {
+      console.log(querySnapshot.data());
       return querySnapshot.data();
     } else {
       // doc.data() will be undefined in this case
@@ -56,7 +58,7 @@ type TimelineData = {
   detail: Array<Data>;
 };
 type Data = {
-  originalDate: Date | null;
+  originalDate: string;
   date: string;
   time: string;
   detail: string;
@@ -65,7 +67,7 @@ type AddDataNewRow = {
   sex: string;
   age: string;
   occupation: string;
-  date: Date | null;
+  date: string;
   detailTimeline: string;
   detail: Data;
 };
@@ -73,7 +75,7 @@ type AddData = {
   sex: string;
   age: string;
   occupation: string;
-  date: Date | null;
+  date: string;
   detailTimeline: string;
 };
 interface Props {
@@ -81,21 +83,28 @@ interface Props {
 }
 const Home: NextPage<Props> = ({ data }) => {
   const [OriginalData, setOriginalData] = useState<TimelineData>(
-    JSON.parse(data)
+    data == "{}"
+      ? {
+          sex: "",
+          age: "",
+          occupation: "",
+          detail: [],
+        }
+      : JSON.parse(data)
   );
   const [newRow, setNewRow] = useState<AddDataNewRow>({
     sex: "",
     age: "",
     occupation: "",
-    date: null,
+    date: "",
     detailTimeline: "",
-    detail: { originalDate: null, date: "", time: "", detail: "" },
+    detail: { originalDate: "", date: "", time: "", detail: "" },
   });
   const [action, setAction] = useState<String>("None");
 
   const AddDatatoFirebase = async (AddData: AddData) => {
     let tempDetail: Data = {
-      originalDate: AddData.date,
+      originalDate: moment(AddData.date).format(),
       date: moment(AddData.date).format("DD/MM/yyyy").toString(),
       time: moment(AddData.date).format("HH:mm").toString(),
       detail: AddData.detailTimeline,
@@ -108,6 +117,7 @@ const Home: NextPage<Props> = ({ data }) => {
       detailTimeline: AddData.detailTimeline,
       detail: tempDetail,
     };
+
     setNewRow(newRow);
     setAction("Add");
     setOriginalData((prevState) => ({
@@ -125,6 +135,9 @@ const Home: NextPage<Props> = ({ data }) => {
       case "Add": {
         updateTimeline();
       }
+      case "Delete": {
+        updateTimeline();
+      }
       default:
         "";
     }
@@ -139,105 +152,19 @@ const Home: NextPage<Props> = ({ data }) => {
       console.error("Error adding document: ", e);
     }
   }
-  useEffect(() => {
-    // setOriginalData(JSON.parse(data));
-    async function addDocc() {
-      try {
-        const db = getFirestore(app);
-
-        const covidRef = collection(db, "covid");
-        const docRef = await setDoc(doc(covidRef, "1"), {
-          sex: "ชาย",
-          age: "20",
-          occupation: "Frontend Developer",
-          detail: [
-            {
-              originalDate: new Date(),
-              date: "01/03/2021",
-              time: "16.00",
-              detail: "สวดมนต์ข้ามคืนตั้งแต่เย็น",
-            },
-            {
-              originalDate: new Date(),
-              date: "02/03/2021",
-              time: "11.00",
-              detail: "ออกไปซื้ออาหารเช้าที่ 7-11 หน้าปากซอย",
-            },
-            {
-              originalDate: new Date(),
-              date: "02/03/2021",
-              time: "14.00",
-              detail: "นอนดู Netflix  เรื่อง Attack on Titan",
-            },
-            {
-              originalDate: new Date(),
-              date: "02/03/2021",
-              time: "16.00",
-              detail: "ดูหนังเหนื่อยนอนเล่นกับแมวบนเตียง",
-            },
-            {
-              originalDate: new Date(),
-              date: "03/03/2021",
-              time: "10.00",
-              detail:
-                "ออกไปหาลูกค้าโดยนั่งวินมอเตอร์ไซต์ออกมาหน้าปากซอยต่อรถเมย์สาย 29 ไปลง BTS หมอชิต แล้วนั่ง BTS ไปลงสถานีตลาดพลู จากนั้นเดินไปนั่งรถสองแถวที่หน้าเดอะมอลล์ท่าพระไปลง  Central พระราม 2 แล้วต่อรถเมล์ไปลงตลาดมหาชัย",
-            },
-          ],
-        });
-      } catch (e) {
-        console.error("Error adding document: ", e);
-      }
-    }
-
-    async function updateDocc() {
-      try {
-        const db = getFirestore(app);
-        const covidRef = collection(db, "covid");
-        const docRef = await updateDoc(doc(covidRef, "1"), {
-          sex: "ชาย",
-          age: "20",
-          occupation: "Backend Developer",
-          detail: [
-            {
-              originalDate: new Date(),
-              date: "01/03/2021",
-              time: "19.00",
-              detail: "สวดมนต์ข้ามคืนตั้งแต่เย็น",
-            },
-            {
-              originalDate: new Date(),
-              date: "02/03/2021",
-              time: "11.00",
-              detail: "ออกไปซื้ออาหารเช้าที่ 7-11 หน้าปากซอย",
-            },
-            {
-              originalDate: new Date(),
-              date: "02/03/2021",
-              time: "14.00",
-              detail: "นอนดู Netflix  เรื่อง Attack on Titan",
-            },
-            {
-              originalDate: new Date(),
-              date: "02/03/2021",
-              time: "16.00",
-              detail: "ดูหนังเหนื่อยนอนเล่นกับแมวบนเตียง",
-            },
-            {
-              originalDate: new Date(),
-              date: "03/03/2021",
-              time: "10.00",
-              detail:
-                "ออกไปหาลูกค้าโดยนั่งวินมอเตอร์ไซต์ออกมาหน้าปากซอยต่อรถเมย์สาย 29 ไปลง BTS หมอชิต แล้วนั่ง BTS ไปลงสถานีตลาดพลู จากนั้นเดินไปนั่งรถสองแถวที่หน้าเดอะมอลล์ท่าพระไปลง  Central พระราม 2 แล้วต่อรถเมล์ไปลงตลาดมหาชัย",
-            },
-          ],
-        });
-      } catch (e) {
-        console.error("Error adding document: ", e);
-      }
-    }
-    // updateDocc();
-    // addDocc();
-  }, []);
+  const deleteItem = (datadelete: Data) => {
+    console.log("indexComp", datadelete);
+    const indexDataDelete = _.indexOf(OriginalData.detail, datadelete);
+    console.log("find index...", indexDataDelete);
+    const TempDetail = OriginalData.detail.filter((value:Data, index) => {
+      if(index != indexDataDelete)return value
+    });
+    setAction("Delete");
+    setOriginalData((prevState) => ({
+      ...prevState,
+      detail: TempDetail,
+    }));
+  };
   return (
     <Container>
       <Grid>
@@ -249,7 +176,7 @@ const Home: NextPage<Props> = ({ data }) => {
           data={OriginalData}
         ></DetailPatient>
         <Grid item xs={12} md={7} lg={8} style={{ padding: "10px" }}>
-          <Timeline data={OriginalData}></Timeline>
+          <Timeline data={OriginalData} deleteItem={deleteItem}></Timeline>
         </Grid>
       </Grid>
     </Container>

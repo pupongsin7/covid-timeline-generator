@@ -1,8 +1,10 @@
 import * as React from "react";
-import styles from "./styles.module.css";
+import styles from "./styles.module.scss";
 import { Grid, Input } from "@mui/material";
+import {useEffect,useState} from "react"
 interface IItemTimelineProps {
   data: [date: string, data: Array<Data>];
+  deleteItem:(datadelete:Data)=>void;
 }
 type Data = {
   originalDate: Date;
@@ -12,10 +14,14 @@ type Data = {
 };
 
 const ItemTimeline = (props: IItemTimelineProps) => {
-  const DeleteTimeLine = () => {
-    console.log("ClickDelete");
+  var timeline:any = props.data;
+  const DeleteTimeLine = (key:any) => {
+    const dataDelete:Data = (timeline[1])[key]
+    props.deleteItem(dataDelete)
   };
-  let timeline: any = props.data;
+  useEffect(()=>{
+    timeline=props.data
+  },[props.data])
   return (
     <div className={styles.Itemtimeline}>
       <div className={styles.LineTimeline}></div>
@@ -27,7 +33,7 @@ const ItemTimeline = (props: IItemTimelineProps) => {
             <div className={styles.TimelineInItemBox}>{value.time}</div>
             <div className={styles.DetailContent}>{value.detail}</div>
             <div className={styles.BoxButton}>
-              <button className={styles.buttonDelete} onClick={DeleteTimeLine}>
+              <button className={styles.buttonDelete} onClick={() =>DeleteTimeLine(key)}>
                 X
               </button>
             </div>
