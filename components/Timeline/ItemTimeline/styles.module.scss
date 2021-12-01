@@ -3,7 +3,13 @@
     flex-direction:row;
     justify-content: flex-start;
     position: relative;
+    animation: fadein 1s;
+
 }
+@keyframes fadein {
+    from {left: -800px;}
+    to {left: 0px;}
+}   
 .LineTimeline{
     border-right:1px dotted  white;
     content: "";
@@ -41,6 +47,7 @@
     color:white;
     margin-bottom: 10px;
     padding:5px;
+
 }
 .TimelineInItemBox{
     color: #ffc107;
