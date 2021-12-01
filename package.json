@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.6.0",
     "@mui/lab": "^5.0.0-alpha.57",
     "@mui/material": "^5.2.1",
+    "@netlify/plugin-nextjs": "^3.9.2",
     "firebase": "^9.5.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
